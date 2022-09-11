@@ -19,11 +19,11 @@
 * [Official Node.js images on Dockerhub](https://hub.docker.com/_/node)
 * [Check the current Node.js LTS version](https://nodejs.org/en/)
 * [Yarn CLI documentation](https://yarnpkg.com/cli/)
-* [Pipeline after this step](docs/pipeline-configs/2-03-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/2-03-.gitlab-ci.yml)
 
 - Create a job to verify that the build folder contains a file named index.html
 - Create another job that runs the project unit tests using the command yarn test
-* [Pipeline after this step](docs/pipeline-configs/2-05-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/2-05-.gitlab-ci.yml)
 ### How do we integrate changes?
 - we use Git to keep track of code changes
 - we need to ensure we don't break the main pipeline
@@ -39,7 +39,7 @@
     * Settings > Repository > Branch main > Allowed to push - select *No one*
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/2-07-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/2-07-.gitlab-ci.yml)
 ### Code review
 - merge requests are often used to review the work before merging it
 - merge requests allow us to document why a specific change was made
@@ -51,7 +51,7 @@
 - testing is done of various levels but high-level tests typically include integration and acceptance tests
 - we use cURL to create an HTTP call to the website
 #### 📚 Resources
-* [Pipeline after this step](docs/pipeline-configs/2-09-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/2-09-.gitlab-ci.yml)
 
 ## How to structure a pipeline
 - our current pipeline structure is just an example, not a rule
@@ -75,14 +75,14 @@
 #### 📚 Resources
 * [AWS CLI documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html)
 * [AWS CLI on Dockerhub](https://hub.docker.com/r/amazon/aws-cli)
-* [Pipeline after this step](docs/pipeline-configs/3-04-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-04-.gitlab-ci.yml)
 
 ### Uploading a file to S3
 - to upload a file to S3, we will use the copy command `cp`
 - `aws s3 cp` allows us to copy a file to and from AWS S3 
 #### 📚 Resources
 * [AWS CLI for S3 documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/index.html)
-* [Pipeline after this step](docs/pipeline-configs/3-05-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-05-.gitlab-ci.yml)
 ### Masking & protecting variables
 - to define a variable, go to *Settings > CI/CD > Variables > Add variable*
 - we typically store passwords or other secrets
@@ -92,7 +92,7 @@
     * Protect variable: if enabled, the variable is not available in branches, apart from the default branch (main), which is a protected branch
     * Mask variable: if enabled, the variable value is never displayed in clear text in job logs
 #### 📚 Resources
-* [Pipeline after this step](docs/pipeline-configs/3-06-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-06-.gitlab-ci.yml)
 ### Identity management with AWS IAM
 - we don't want to use our username and password to use AWS services from the CLI 
 - as we only need access to S3, it makes sense to work with an account with limited permissions
@@ -113,7 +113,7 @@
 #### 📚 Resources
 
 * [AWS S3 sync command documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/sync.html)
-* [Pipeline after this step](docs/pipeline-configs/3-08-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-08-.gitlab-ci.yml)
 ### Hosting a website on S3
 - files in the S3 bucket are not publicly available
 - to get the website to work, we need to configure the bucket
@@ -121,7 +121,7 @@
 - from the bucket, click on the *Permissions* tab and disable *Block public access*
 - from the bucket, click on the *Permissions* tab and set a bucket policy
 #### 📚 Resources
-* [S3 bucket policy example](docs/s3-bucket-policy-example.json)
+* [S3 bucket policy example](poc/s3-bucket-policy-example.json)
 ### Controlling when jobs run
 
 - we don’t want to deploy to production from every branch
@@ -130,9 +130,9 @@
 - `CI_DEFAULT_BRANCH` gives us the name of the default branch (typically main or master)
 
 #### 📚 Resources
-* [GitLab reference for the .gitlab-ci.yml file - rules:](https://docs.gitlab.com/ee/ci/yaml/#rules)
-* [Predefined variables in GitLab](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
-* [Pipeline after this step](docs/pipeline-configs/3-10-.gitlab-ci.yml)
+* [GitLab reference for the .gitlab-ci.yml file - rules:](https://poc.gitlab.com/ee/ci/yaml/#rules)
+* [Predefined variables in GitLab](https://poc.gitlab.com/ee/ci/variables/predefined_variables.html)
+* [Pipeline after this step](poc/pipeline-configs/3-10-.gitlab-ci.yml)
 
 ## Post-deployment testing
 
@@ -140,12 +140,12 @@
 - with `grep`, we will check to see if the index.html file contains a specific string
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/3-11-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-11-.gitlab-ci.yml)
 
 - create a staging environment and add it to the CI/CD pipeline
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/3-14-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-14-.gitlab-ci.yml)
 ### Environments
 
 - every system where we deploy an application is an environment
@@ -153,8 +153,8 @@
 - GitLab offers support for environments
 - we can define environments in *Deployments > Environments*
 #### 📚 Resources
-* [Predefined variables in GitLab](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
-* [Pipeline after this step](docs/pipeline-configs/3-15-.gitlab-ci.yml)
+* [Predefined variables in GitLab](https://poc.gitlab.com/ee/ci/variables/predefined_variables.html)
+* [Pipeline after this step](poc/pipeline-configs/3-15-.gitlab-ci.yml)
 
 ### Reusing configuration
 - sometimes, multiple jobs may look almost the same, and we should try to avoid repeating ourselves
@@ -163,15 +163,15 @@
 - the current build number is given by a predefined GitLab CI variable named `CI_PIPELINE_IID`
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/3-16-.gitlab-ci.yml)
-* [Predefined variables in GitLab](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
-* [Pipeline after this step](docs/pipeline-configs/3-18-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-16-.gitlab-ci.yml)
+* [Predefined variables in GitLab](https://poc.gitlab.com/ee/ci/variables/predefined_variables.html)
+* [Pipeline after this step](poc/pipeline-configs/3-18-.gitlab-ci.yml)
 ### Continuous Delivery pipeline
 
 - adding `when: manual` allows us to manually trigger the production deployment
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/3-19-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/3-19-.gitlab-ci.yml)
 ## Deploying a dockerized application to AWS
 
 - modern applications tend to be more complex, and most of them use Docker 
@@ -206,11 +206,11 @@ COPY build /usr/share/nginx/html
 - to build Docker images from a GitLab CI pipeline, we need to start the Docker Daemon as a service
 #### 📚 Resources
 
-* [docker build command reference](https://docs.docker.com/engine/reference/commandline/build/)
+* [docker build command reference](https://poc.docker.com/engine/reference/commandline/build/)
 * [Docker in Docker (dind) on Dockerhub](https://hub.docker.com/_/docker)
-* [Predefined variables in GitLab](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
-* [docker image ls](https://docs.docker.com/engine/reference/commandline/image_ls/)
-* [Pipeline after this step](docs/pipeline-configs/4-05-.gitlab-ci.yml)
+* [Predefined variables in GitLab](https://poc.gitlab.com/ee/ci/variables/predefined_variables.html)
+* [docker image ls](https://poc.docker.com/engine/reference/commandline/image_ls/)
+* [Pipeline after this step](poc/pipeline-configs/4-05-.gitlab-ci.yml)
 
 ### Docker container registry
 - to preserve a Docker image, we need to push it to a registry
@@ -218,16 +218,16 @@ COPY build /usr/share/nginx/html
 - GitLab offers a private Docker registry which is ideal for private projects
 #### 📚 Resources
 
-* [docker login command reference](https://docs.docker.com/engine/reference/commandline/login/)
-* [docker push command reference](https://docs.docker.com/engine/reference/commandline/push/)
-* [Pipeline after this step](docs/pipeline-configs/4-06-.gitlab-ci.yml)
+* [docker login command reference](https://poc.docker.com/engine/reference/commandline/login/)
+* [docker push command reference](https://poc.docker.com/engine/reference/commandline/push/)
+* [Pipeline after this step](poc/pipeline-configs/4-06-.gitlab-ci.yml)
 
 ### Testing the container
 - we want to test the container to see if the application running on it (web server) is working properly
 - to start the container, we will use the `services:` keyword
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/4-07-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/4-07-.gitlab-ci.yml)
 ### Private registry authentication
 
 - AWS EB requires authentication credentials to pull our Docker image
@@ -238,21 +238,21 @@ COPY build /usr/share/nginx/html
     * read_registry
 #### 📚 Resources
 
-* [Pipeline after this step](docs/pipeline-configs/4-08-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/4-08-.gitlab-ci.yml)
 ### Deploying to AWS Elastic Beanstalk
 
 - a new deployment to AWS EB happens in two steps
 - step 1: we create a new application version with `aws elasticbeanstalk create-application-version`
 - step 2: we update the environment with the new application version with `aws elasticbeanstalk update-environment`
 #### 📚 Resources
-* [Pipeline after this step](docs/pipeline-configs/4-09-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/4-09-.gitlab-ci.yml)
 
 ### Post-deployment testing
 
 - updating an EB environment does not happen instantly
 - we will use `aws elasticbeanstalk wait` to know when the environment has been updated
 #### 📚 Resources
-* [Pipeline after this step](docs/pipeline-configs/4-10-.gitlab-ci.yml)
+* [Pipeline after this step](poc/pipeline-configs/4-10-.gitlab-ci.yml)
 
 
 
