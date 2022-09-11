@@ -1,26 +1,21 @@
 stages:
-    - .pre
     - build
     - test
+    - deploy
 
-build website:
+.build website:
     image: node:16-alpine
     stage: build
     script:
         - yarn install
+        - yarn lint
+        - yarn test
         - yarn build
     artifacts:
         paths:
             - build
 
-linter:
-    image: node:16-alpine
-    stage: .pre
-    script:
-        - yarn install
-        - yarn lint
-
-test website:
+.test website:
     image: node:16-alpine
     stage: test
     script:
@@ -30,9 +25,12 @@ test website:
         - sleep 10
         - curl http://localhost:3000 | grep "React App"
 
-unit tests:
-    image: node:16-alpine
-    stage: .pre
+deploy to s3:
+    stage: deploy
+    image: 
+        name: amazon/aws-cli:2.4.11
+        entrypoint: [""]
     script:
-        - yarn install
-        - yarn test
+        - aws --version
+        - echo "Hello S3" > test.txt
+        - aws s3 cp test.txt s3://AWS_S3_BUCKET/test.txt
