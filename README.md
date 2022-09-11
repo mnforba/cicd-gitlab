@@ -23,8 +23,11 @@ most software projects have a build step where code is compiled or prepared for 
 * [Official Node.js images on Dockerhub](https://hub.docker.com/_/node)
 * [Check the current Node.js LTS version](https://nodejs.org/en/)
 * [Yarn CLI documentation](https://yarnpkg.com/cli/)
-* [Pipeline after this lecture](docs/pipeline-configs/lesson-2-03-.gitlab-ci.yml)
+* [Pipeline after this step](docs/pipeline-configs/2-03-.gitlab-ci.yml)
 
+- Create a job to verify that the build folder contains a file named index.html
+- Create another job that runs the project unit tests using the command yarn test
+* [Pipeline after this step](docs/pipeline-configs/2-05-.gitlab-ci.yml)
 ### How do we integrate changes?
 
 - we use Git to keep track of code changes
@@ -40,7 +43,9 @@ most software projects have a build step where code is compiled or prepared for 
     * Merge checks > check *Pipelines must succeed*
 - protect the master by allowing changes only through a merge request: 
     * Settings > Repository > Branch main > Allowed to push - select *No one*
+#### 📚 Resources
 
+* [Pipeline after this step](docs/pipeline-configs/2-07-.gitlab-ci.yml)
 ### Code review
 
 - merge requests are often used to review the work before merging it
@@ -53,6 +58,9 @@ most software projects have a build step where code is compiled or prepared for 
 - before we ship the final product, we try to test it to see if it works
 - testing is done of various levels but high-level tests typically include integration and acceptance tests
 - we use cURL to create an HTTP call to the website
+#### 📚 Resources
+
+* [Pipeline after this step](docs/pipeline-configs/2-09-.gitlab-ci.yml)
 
 ## How to structure a pipeline
 
@@ -67,7 +75,6 @@ most software projects have a build step where code is compiled or prepared for 
     * if jobs have dependencies between them, they need to be in distinct stages
 
 ## Continuous Deployment with GitLab & AWS
-
 ### overview
 
 - we will take our website project and deploy it to the AWS cloud. 
@@ -76,10 +83,22 @@ most software projects have a build step where code is compiled or prepared for 
 - the website is static and requires no computing power or a database
 - we will use AWS S3 to store the public files and serve them over HTTP
 - AWS S3 files (objects) are stored in buckets
+- to interact with the AWS cloud services, we need to use AWS CLI
 #### 📚 Resources
 
 * [AWS CLI documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/index.html)
 * [AWS CLI on Dockerhub](https://hub.docker.com/r/amazon/aws-cli)
+* [Pipeline after this step](docs/pipeline-configs/3-04-.gitlab-ci.yml)
+
+### Uploading a file to S3
+
+- to upload a file to S3, we will use the copy command `cp`
+- `aws s3 cp` allows us to copy a file to and from AWS S3 
+
+#### 📚 Resources
+
+* [AWS CLI for S3 documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/index.html)
+* [Pipeline after this step](docs/pipeline-configs/3-05-.gitlab-ci.yml)
 
 ### Masking & protecting variables
 
@@ -90,7 +109,9 @@ most software projects have a build step where code is compiled or prepared for 
 - flags:
     * Protect variable: if enabled, the variable is not available in branches, apart from the default branch (main), which is a protected branch
     * Mask variable: if enabled, the variable value is never displayed in clear text in job logs
+#### 📚 Resources
 
+* [Pipeline after this step](docs/pipeline-configs/3-06-.gitlab-ci.yml)
 ### Identity management with AWS IAM
 
 - we don't want to use our username and password to use AWS services from the CLI 
@@ -115,6 +136,7 @@ most software projects have a build step where code is compiled or prepared for 
 #### 📚 Resources
 
 * [AWS S3 sync command documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/s3/sync.html)
+* [Pipeline after this step](docs/pipeline-configs/3-08-.gitlab-ci.yml)
 
 ### Hosting a website on S3
 
@@ -140,12 +162,20 @@ most software projects have a build step where code is compiled or prepared for 
 
 * [GitLab reference for the .gitlab-ci.yml file - rules:](https://docs.gitlab.com/ee/ci/yaml/#rules)
 * [Predefined variables in GitLab](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
+* [Pipeline after this step](docs/pipeline-configs/3-10-.gitlab-ci.yml)
 
 ## Post-deployment testing
 
 - we will use `cURL` to download the index.html file from the website
 - with `grep`, we will check to see if the index.html file contains a specific string
+#### 📚 Resources
 
+* [Pipeline after this step](docs/pipeline-configs/3-11-.gitlab-ci.yml)
+
+- create a staging environment and add it to the CI/CD pipeline
+#### 📚 Resources
+
+* [Pipeline after this step](docs/pipeline-configs/3-14-.gitlab-ci.yml)
 ### Environments
 
 - every system where we deploy an application is an environment
@@ -156,6 +186,7 @@ most software projects have a build step where code is compiled or prepared for 
 #### 📚 Resources
 
 * [Predefined variables in GitLab](https://docs.gitlab.com/ee/ci/variables/predefined_variables.html)
+* [Pipeline after this step](docs/pipeline-configs/3-15-.gitlab-ci.yml)
 
 ### Reusing configuration
 
