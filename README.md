@@ -30,7 +30,7 @@
 
 ### Merge requests
 - we need to ensure that the chances of breaking the main branch are reduced
-- here are some project settings for working with Merge Requests that I recommend:
+- here are some project settings for working with Merge Requests that I used:
     * Go to Settings > Merge requests
     * Merge method > select *Fast-forward merge*
     * Squash commits when merging > select *Encourage*
