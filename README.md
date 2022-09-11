@@ -1,5 +1,5 @@
 # GitLab CICD - Build Pipelines and Deploy to AWS
-### Lesson 1 - Unit overview
+### Overview
 - we will start working on a simple website project
 - we want to automate any of the manual steps required for integrating the changes of multiple developers
 - we will create a pipeline that will build and test the software we are creating
