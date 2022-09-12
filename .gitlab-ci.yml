@@ -6,9 +6,10 @@ stages:
     - deploy production
 #    - test production
 
-#variables:
+variables:
 #    APP_BASE_URL: http://melvin-20220707.s3-website-us-east-1.amazonaws.com
 #    APP_BASE_URL_STAGING: http://melvin-20220707-staging.s3-website-us-east-1.amazonaws.com
+     APP_VERSION: $CI_PIPELINE_IID
     
 build website:
     image: node:16-alpine
@@ -18,6 +19,7 @@ build website:
         - yarn lint
         - yarn test
         - yarn build
+        - echo $APP_VERSION > build/version.html
     artifacts:
         paths:
             - build
@@ -46,6 +48,7 @@ test website:
         - aws s3 sync build s3://$AWS_S3_BUCKET --delete
 #        - curl $APP_BASE_URL_STAGING | grep "React App" 
         - curl $CI_ENVIRONMENT_URL | grep "React App"
+        - curl $CI_ENVIRONMENT_URL/version.html | grep $APP_VERSION
 
 deploy to staging:
     stage: deploy staging
