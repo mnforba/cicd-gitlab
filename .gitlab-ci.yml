@@ -34,7 +34,7 @@ deploy to s3:
     script:
         - aws --version
         - echo "Hello S3" > test.txt 
-        - aws s3 cp test.txt s3://s3://$AWS_S3_BUCKET/text.txt
+        - aws s3 cp test.txt s3://$AWS_S3_BUCKET/text.txt
 .production tests:
     stage: post deploy
     image: curlimages/curl
