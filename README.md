@@ -254,5 +254,6 @@ COPY build /usr/share/nginx/html
 #### 📚 Resources
 * [Pipeline after this step](poc/pipeline-configs/4-10-.gitlab-ci.yml)
 
+file:///C:/Users/nforb/Downloads/20220605_023334.jpg
 
 
