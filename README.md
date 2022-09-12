@@ -6,7 +6,7 @@
 - we will try to automate the build and deployment of a simple website project build with JavaScript using the React framework
 - Automation CLI tools we are using is GitLab CI
 #### 📚 Resources
-* [Website project (fork this)](https://gitlab.com/gitlab-course-public/freecodecamp-gitlab-ci)
+* [Website project (fork this)](https://github.com/mnforba/cicd-gitlab.git)
 ### Getting started - Build the project
 - most software projects have a build step where code is compiled or prepared for production-use
 - yarn is a Node.js package manager that helps with managing the project by running scripts and installing dependencies
