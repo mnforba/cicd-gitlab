@@ -33,7 +33,7 @@ deploy to s3:
         entrypoint: [""]
     script:
         - aws --version
-        - echo "Hello S3" > test.txt s3://s3://melvin-20220707/text.txt
+        - echo "Hello S3" > test.txt s3://s3://$AWS_S3_BUCKET/text.txt
 .production tests:
     stage: post deploy
     image: curlimages/curl
