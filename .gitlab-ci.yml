@@ -52,7 +52,6 @@ test website:
 
 deploy to staging:
     stage: deploy staging
-    when: manual
     environment: staging
     extends: .deploy
 #    image: 
@@ -77,6 +76,7 @@ deploy to staging:
 
 deploy to production:
     stage: deploy production
+    when: manual
     environment: production
     extends: .deploy
 #    image: 
