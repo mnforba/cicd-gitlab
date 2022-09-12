@@ -52,6 +52,7 @@ test website:
 
 deploy to staging:
     stage: deploy staging
+    when: manual
     environment: staging
     extends: .deploy
 #    image: 
