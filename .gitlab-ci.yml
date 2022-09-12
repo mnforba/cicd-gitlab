@@ -1,10 +1,12 @@
 stages:
     - build
-    - test
-    - deploy staging
+    - package
+#    - test
+#    - deploy staging
 #    - test staging
-    - deploy production
-#    - test production
+#    - deploy production
+    - test
+    - deploy
 
 variables:
 #    APP_BASE_URL: http://melvin-20220707.s3-website-us-east-1.amazonaws.com
@@ -24,36 +26,36 @@ build website:
         paths:
             - build
 
-test website:
-    image: node:16-alpine
-    stage: test
-    script:
-        - yarn global add serve
-        - apk add curl
-        - serve -s build &
-        - sleep 10
-        - curl http://localhost:3000 | grep "React App"
+#test website:
+#    image: node:16-alpine
+#    stage: test
+#    script:
+#        - yarn global add serve
+#        - apk add curl
+#        - serve -s build &
+#        - sleep 10
+#        - curl http://localhost:3000 | grep "React App"
 
-.deploy:
+#.deploy:
 #    stage: deploy staging
 #    environment: staging
-    image: 
-        name: amazon/aws-cli:2.7.20
-        entrypoint: [""]
-    rules:
-        - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-    script:
-        - aws --version
+#    image: 
+#        name: amazon/aws-cli:2.7.20
+#        entrypoint: [""]
+#    rules:
+#        - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#    script:
+#        - aws --version
 #        - aws s3 sync build s3://$AWS_S3_BUCKET_STAGING --delete
-        - aws s3 sync build s3://$AWS_S3_BUCKET --delete
+#        - aws s3 sync build s3://$AWS_S3_BUCKET --delete
 #        - curl $APP_BASE_URL_STAGING | grep "React App" 
-        - curl $CI_ENVIRONMENT_URL | grep "React App"
-        - curl $CI_ENVIRONMENT_URL/version.html | grep $APP_VERSION
+#        - curl $CI_ENVIRONMENT_URL | grep "React App"
+#        - curl $CI_ENVIRONMENT_URL/version.html | grep $APP_VERSION
 
-deploy to staging:
-    stage: deploy staging
-    environment: staging
-    extends: .deploy
+#deploy to staging:
+#    stage: deploy staging
+#    environment: staging
+#    extends: .deploy
 #    image: 
 #        name: amazon/aws-cli:2.7.20
 #        entrypoint: [""]
@@ -74,11 +76,10 @@ deploy to staging:
 #    script:
 #        - curl $APP_BASE_URL_STAGING | grep "React App"
 
-deploy to production:
-    stage: deploy production
-    when: manual
-    environment: production
-    extends: .deploy
+##    stage: deploy production
+#    when: manual
+#    environment: production
+#    extends: .deploy
 #    image: 
 #        name: amazon/aws-cli:2.7.20
 #        entrypoint: [""]
@@ -96,3 +97,45 @@ deploy to production:
 #        - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 #    script:
 #        - curl $APP_BASE_URL | grep "React App"
+
+build docker image:
+    stage: package
+    image: docker:20.10.17
+    services:
+        - docker:20.10.17-dind
+    script:
+        - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER  $CI_REGISTRY --password-stdin
+        - docker build -t $CI_REGISTRY_IMAGE -t $CI_REGISTRY_IMAGE:$APP_VERSION .
+        - docker image ls
+        - docker push --all-tags $CI_REGISTRY_IMAGE
+
+test docker image:
+    stage: test
+    image: curlimages/curl
+    services:
+        - name: $CI_REGISTRY_IMAGE:$APP_VERSION
+          alias: website
+    script:
+        - curl http://website/version.html | grep $APP_VERSION
+
+deploy to production:
+    image: 
+        name: amazon/aws-cli:2.7.20
+        entrypoint: [""]
+    stage: deploy
+    variables:
+        APP_NAME: My website
+        APP_ENV_NAME: Mywebsite-env
+    environment: production
+    script:
+        - aws --version
+        - yum install -y gettext
+        - export DEPLOY_TOKEN=$(echo $GITLAB_DEPLOY_TOKEN | tr -d "\n" | base64)
+        - envsubst < templates/Dockerrun.aws.json > Dockerrun.aws.json
+        - envsubst < templates/auth.json > auth.json
+        - cat Dockerrun.aws.json
+        - cat auth.json
+        - aws s3 cp Dockerrun.aws.json s3://$AWS_S3_BUCKET/Dockerrun.aws.json
+        - aws s3 cp auth.json s3://$AWS_S3_BUCKET/auth.json
+        - aws elasticbeanstalk create-application-version --application-name "$APP_NAME" --version-label $APP_VERSION --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=Dockerrun.aws.json
+        - aws elasticbeanstalk update-environment --application-name "$APP_NAME" --version-label $APP_VERSION --environment-name $APP_ENV_NAME
